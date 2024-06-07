@@ -98,6 +98,13 @@ int main() {
         cout<<k_Heap[i]<<endl;
     }
     cout<<endl;
-
+    // 找中位數
+    if(size%2==0){
+        cout<<k_Heap[size/2-1]<<endl;
+        cout<<k_Heap[size/2]<<endl;
+    }
+    else{
+        cout<<k_Heap[size/2]<<endl;
+    }
     return 0;
 }

@@ -39,6 +39,9 @@ public:
         else if(close == k.close) return Date > k.Date;
         else return false;
     }
+    float get_close() const {
+        return close;
+    }
     friend ostream& operator<<(ostream& os, const k_Bar& k) {
         os << k.Date << " " << k.open << " " << k.High << " " << k.Low << " " << k.close;
         return os;

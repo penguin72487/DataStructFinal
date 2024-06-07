@@ -38,6 +38,10 @@ class Heap{// defalt max heap if want to make min heap, change the logic > to <
             return;
         }
         int parent = cur>>1;
+        if(root[cur].value == root[parent].value){
+            swap(root[cur],root[parent]);
+            up_Heapify(parent);
+        }
         if(root[cur].value > root[parent].value){
             swap(root[cur],root[parent]);
             up_Heapify(parent);
@@ -118,8 +122,13 @@ class Heap{// defalt max heap if want to make min heap, change the logic > to <
         // node *res;
         while(!empty())
         {
-          pop();
+            pop();
         }
+        for (int i = 1,j=1; i < n; ++i) {
+        if (root[i] != root[i - 1]) {
+            root[j++] = root[i];
+        }
+    }
         n=tmp_Size;
         // return root;
         return;

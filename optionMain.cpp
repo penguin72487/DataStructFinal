@@ -48,6 +48,9 @@ public:
         else if(transactionPrice == k.transactionPrice) return Date > k.Date;
         else return false;
     }
+    float get_transactionPrice() const {
+        return transactionPrice;
+    }
     friend ostream& operator<<(ostream& os, const k_Bar& k) {
         os << k.Date << " " << k.name << " " << k.exercisePrice << " " << k.expirationDate << " " << k.callPut << " " << k.transactionTime << " " << k.transactionPrice << " " << k.transactionVolume << " " << k.openingAuctionPrice;
         return os;

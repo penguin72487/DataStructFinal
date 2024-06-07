@@ -1,5 +1,8 @@
 # 2024期末專題
-
+開發演算法 @企鵝72487 
+使用演算法 @SiroKu_ 
+繪圖 @Jaxx 
+寫報告 @提醒我打程式
 # request
 
 [原文](NUK\Final\finalProject.pdf)  

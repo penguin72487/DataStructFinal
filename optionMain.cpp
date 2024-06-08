@@ -36,6 +36,10 @@ public:
         }
         return *this;
     }
+    bool operator!=(const heap_Value& b) const override {
+        const k_Bar& k = dynamic_cast<const k_Bar&>(b);
+        return transactionPrice != k.transactionPrice || Date != k.Date;
+    }
     bool operator<(const heap_Value& b) const override {
         const k_Bar& k = dynamic_cast<const k_Bar&>(b);
         if(transactionPrice < k.transactionPrice) return true;

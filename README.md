@@ -66,8 +66,7 @@ d. 使用成交價格計算逐筆返回（除了第一筆），然後確定最�
 
 # quickstar
   
-請使用C++編譯執行mian.cpp  
-  
+請使用C++編譯執行mian.cpp，目前輸出在out.txt
 # 資料結構
   
 # Heap

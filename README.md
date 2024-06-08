@@ -84,7 +84,7 @@ pop() 把數值移出推積
 top() 得到堆積最大值  
 int size() 得到堆積大小  
 bool empty() 判斷堆積是否為空  
-sort() heap sort，做了之後就在也不是heap了  
+sort() heap sort，做了之後就在也不是heap了，注意sort會把重複資料給去掉，size要重新獲取
 T heap[] 用index取得堆積裡面root陣列的資料，用在heap sort之後  
 cout<< 輸出堆積  
 

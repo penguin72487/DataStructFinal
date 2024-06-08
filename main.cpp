@@ -27,6 +27,11 @@ public:
         }
         return *this;
     }
+    bool operator!=(const heap_Value& b) const override {
+        const k_Bar& k = dynamic_cast<const k_Bar&>(b);
+        return close != k.close || Date != k.Date;
+    }
+
     bool operator<(const heap_Value& b) const override {
         const k_Bar& k = dynamic_cast<const k_Bar&>(b);
         if(close < k.close) return true;
@@ -80,7 +85,7 @@ int main() {
     file.close();
     cout << size << endl;
     ////////////////////////////////////////////////////////////////////////////////////////////
-
+    freopen("out.txt", "w", stdout);
 
     Heap<k_Bar> k_Heap(size);
     for(auto& it:k_line){
@@ -89,6 +94,7 @@ int main() {
     cout<<k_Heap.top()<<endl;
     cout<<endl;
     k_Heap.sort();
+    size=k_Heap.size();
     // int n=k_Heap.size();
     for(int i=0;i<10;i++){// small K
         cout<<k_Heap[i]<<endl;
@@ -98,6 +104,8 @@ int main() {
         cout<<k_Heap[i]<<endl;
     }
     cout<<endl;
+    
+
     // 找中位數
     if(size%2==0){
         cout<<k_Heap[size/2-1]<<endl;
@@ -106,5 +114,8 @@ int main() {
     else{
         cout<<k_Heap[size/2]<<endl;
     }
+
+    // cout<<k_Heap<<endl;
+    
     return 0;
 }

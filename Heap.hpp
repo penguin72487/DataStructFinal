@@ -7,6 +7,7 @@ public:
     virtual heap_Value& operator=(const heap_Value&) { // Heap custom class should be inherited from heap_Value
         return *this;
     }
+    virtual bool operator!=(const heap_Value &b) const = 0;
     virtual bool operator<(const heap_Value&) const = 0;// follow the logic of < to make max heap reverse the logic of < to make min heap
     virtual bool operator>(const heap_Value&) const = 0;// follow the logic of < to make max heap reverse the logic of < to make min heap
     virtual ~heap_Value() = default;
@@ -37,11 +38,7 @@ class Heap{// defalt max heap if want to make min heap, change the logic > to <
         if(cur == 0){
             return;
         }
-        int parent = cur>>1;
-        if(root[cur].value == root[parent].value){
-            swap(root[cur],root[parent]);
-            up_Heapify(parent);
-        }
+        int parent = cur >> 1;
         if(root[cur].value > root[parent].value){
             swap(root[cur],root[parent]);
             up_Heapify(parent);
@@ -124,12 +121,15 @@ class Heap{// defalt max heap if want to make min heap, change the logic > to <
         {
             pop();
         }
-        for (int i = 1,j=1; i < n; ++i) {
-        if (root[i] != root[i - 1]) {
-            root[j++] = root[i];
-        }
-    }
         n=tmp_Size;
+        for (int i = 1,j=1; i < n; ++i) {
+            if (root[i].value != root[i - 1].value) {
+                root[j++].value = root[i].value;
+                tmp_Size = j;
+            }
+        }
+        n=tmp_Size;
+
         // return root;
         return;
     }

@@ -132,9 +132,30 @@ class linklist{
         tail = nullptr;
         n = 0;
     }
+
+    void dailyPrint() {
+        int i = 0;
+        double previous_close = 0;
+        for (auto& it : *this) {
+            if (i != 0) {
+                cout << it.get_Date() << " " << (it.get_close() - previous_close) / previous_close * 100 << endl;
+            }
+            previous_close = it.get_close();
+            i++;
+        }
+    }
+    void intradailyPrint(){
+        int i=0;
+        for(auto& it:*this){
+            cout << it.get_Date() << " " << (it.get_close() - it.get_open()) / it.get_open() * 100 << endl;
+            i++;
+        }
+    }
     friend ostream& operator<<(ostream& os, const linklist& ll){
+        int i=0;
         for(auto& it:ll){
-            os<<it<<" ";
+            os<< it.get_Date() <<" "<< it.get_close() << endl;
+            i++;
         }
         return os;
     }

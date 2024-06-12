@@ -74,6 +74,7 @@ int main() {
     
     string line;
     int size = 0;
+    int caseB_date = 0;
     while (getline(file, line)) {
         stringstream ss(line);
         string item;
@@ -81,35 +82,37 @@ int main() {
         int Date;
         float open, High, Low, close;
         ss >> Date >> trash >> open >> trash >> High >> trash >> Low >> trash >> close;
-
-        k_line.push_back(k_Bar(Date, open, High, Low, close));
-        size++;
+        if (caseB_date %5 == 0){
+            k_line.push_back(k_Bar(Date, open, High, Low, close));
+            size++;
+        }
+        caseB_date++;
     }
 
     file.close();
+    cout<< "1:" << endl;
     cout << size << endl;
     ////////////////////////////////////////////////////////////////////////////////////////////
-    freopen("out1.txt", "w", stdout);
+    freopen("P1out/b/out.txt", "w", stdout);
 
     Heap<k_Bar> k_Heap(size);
     for(auto& it:k_line){
         k_Heap.push(it);
     }
-    cout<<k_Heap.top()<<endl;
-    cout<<endl;
+    cout<< endl <<  "2:" << endl;
+    // cout<<k_Heap.top()<<endl;
     k_Heap.sort();
     size=k_Heap.size();
     // int n=k_Heap.size();
     for(int i=0;i<10;i++){// small K
         cout<<k_Heap[i]<<endl;
     }
-    cout<<endl;
+        cout << endl<< "3:" <<endl;
     for(int i=size-10;i<size;i++){// large K
         cout<<k_Heap[i]<<endl;
     }
-    cout<<endl;
     
-
+    cout << endl << "4:" <<endl;
     // 找中位數
     if(size%2==0){
         cout<<k_Heap[size/2-1]<<endl;
@@ -118,7 +121,7 @@ int main() {
     else{
         cout<<k_Heap[size/2]<<endl;
     }
-    cout<<endl;
+    cout << endl<< "5:" <<endl;
 
     // cout<<k_Heap<<endl;
     //5
@@ -139,7 +142,7 @@ int main() {
     }
     cout<<"max_return: "<<max_return<<" on "<<k_Heap[max_index]<<endl;
     cout<<"min_return: "<<min_return<<" on "<<k_Heap[min_index]<<endl;
-    cout<<endl;
+    cout << endl<< "6:" <<endl;
     //6
     //     Compute the intraday return for every day. Then determine what the maximum and 
     // minimum returns (return could be a negative value) are and on which day(s) they occur. 
@@ -166,22 +169,24 @@ int main() {
     }
     cout<<"max_return2: "<<max_return2<<" on "<<k_Heap[max_index2]<<endl;
     cout<<"min_return2: "<<min_return2<<" on "<<k_Heap[min_index2]<<endl;
-    cout<<endl;
+    cout << endl<< "7:" <<endl;
     
     //7 Make a plot of the closing price over time, in which the x-axis is the day index and y-axis is the price.
 
     for(int i=0;i<size;i++){
         cout<<i<<" "<<k_Heap[i].get_close()<<endl;
     }
+    cout << endl<< "8:" <<endl;
     //8  Make a plot of the daily return over time, in which the x-axis is the day index and y-axis is the daily return.
     for(int i=0;i<size;i++){
         cout<<i<<" "<<(k_Heap[i].get_close()-k_Heap[i].open)/k_Heap[i].open*100<<endl;
     }
     //9  Make a plot of the intraday return over time, in which the x-axis is the day index and y-axis is the intraday return.
-
+    cout << endl<< "9:" <<endl;
     for(int i=0;i<size;i++){
         cout<<i<<" "<<(k_Heap[i].get_close()-k_Heap[i].open)/k_Heap[i].open*100<<endl;
     }
+    cout << endl<< "10:" <<endl;
     //10 Find the maximum, minimum and median prices using all the 4 columns of prices (i.e., Open_price, High_price, Low_price and Close_price) and determine on which date they occur.
     float max_price=-1000000;
     float min_price=1000000;

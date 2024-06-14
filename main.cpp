@@ -77,7 +77,7 @@ int main() {
     getline(file, header); // 讀取並忽略表頭行
     
     string line;
-    int size = 0;
+    // int size = 0;
     int caseB_date = 0;
     while (getline(file, line)) {
         stringstream ss(line);

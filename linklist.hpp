@@ -170,10 +170,8 @@ class linklist{
     //     }
     // }
     friend ostream& operator<<(ostream& os, const linklist& ll){
-        int i=0;
         for(auto& it:ll){
             os<< it<< endl;
-            i++;
         }
         return os;
     }

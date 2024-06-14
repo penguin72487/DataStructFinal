@@ -154,7 +154,7 @@ class linklist{
     friend ostream& operator<<(ostream& os, const linklist& ll){
         int i=0;
         for(auto& it:ll){
-            os<< it.get_Date() <<" "<< it.get_close() << endl;
+            os<< it<< endl;
             i++;
         }
         return os;

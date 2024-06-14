@@ -77,7 +77,7 @@ int main() {
     getline(file, header); // 讀取並忽略表頭行
     
     string line;
-    // int size = 0;
+    int size = 0;
     int caseB_date = 0;
     while (getline(file, line)) {
         stringstream ss(line);
@@ -94,11 +94,11 @@ int main() {
     }
 
     file.close();
-    // cout<< "1:" << endl;
-    // cout << size << endl;
+
     // ////////////////////////////////////////////////////////////////////////////////////////////
     freopen("P1out/b/7-9out.txt", "w", stdout);
-
+    // cout<< "1:" << endl;
+    // cout << size << endl;
     // Heap<k_Bar> k_Heap(size);
     // for(auto& it:k_line){
     //     k_Heap.push(it);

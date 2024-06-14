@@ -121,6 +121,14 @@ class linklist{
     bool empty(){
         return n==0;
     }
+    bool exist(T data){
+        for(auto& it:*this){
+            if(it==data){
+                return true;
+            }
+        }
+        return false;
+    }
     void clear(){
         node* cur = head;
         while(cur!=nullptr){

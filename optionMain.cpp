@@ -7,6 +7,8 @@
 #include <sstream>
 using namespace std;
 #define endl "\n"
+
+linklist<string> all_products;
 class k_Bar : public heap_Value {
     int Date;
     string name;
@@ -59,6 +61,17 @@ public:
         os << k.Date << " " << k.name << " " << k.exercisePrice << " " << k.expirationDate << " " << k.callPut << " " << k.transactionTime << " " << k.transactionPrice << " " << k.transactionVolume << " " << k.openingAuctionPrice;
         return os;
     }
+
+    int getNameCount() const {
+        return name.size();
+    }
+    int getDate() const {
+        return Date;
+    }
+    string getName() const {
+        return name;
+    }
+
 };
 void option_Input(ifstream &file,linklist<k_Bar> &TXO_1000_201706_P,
     linklist<k_Bar> &TXO_9500_201706_C,
@@ -83,6 +96,9 @@ void option_Input(ifstream &file,linklist<k_Bar> &TXO_1000_201706_P,
             float transactionVolume;
             float openingAuctionPrice;
             ss >> Date >> trash >> name >> trash >> exercisePrice >> trash >> expirationDate >> trash >> callPut >> trash >> transactionTime >> trash >> transactionPrice >> trash >> transactionVolume >> trash >> openingAuctionPrice;
+            if(!all_products.exist(name)){
+                all_products.push_back(name);
+            }
             if(name== "TXO" && exercisePrice==1000 && expirationDate==201706 && callPut=='P'){
                 TXO_1000_201706_P.push_back(k_Bar(Date, name, exercisePrice, expirationDate, callPut, transactionTime, transactionPrice, transactionVolume, openingAuctionPrice));
             }
@@ -151,26 +167,64 @@ int main() {
     file.close();
 
     ////////////////////////////////////////////////////////////////////////////////////////////
+    //(1) 確定這五個數據集中總共有多少獨特的產品。
+    cout << "Total number of unique products: " << all_products.size() << endl;
+    // 確定特定產品是否存在
+    bool TXO_1000_201706_P_exists = !TXO_1000_201706_P.empty();
+    bool TXO_9500_201706_C_exists = !TXO_9500_201706_C.empty();
+    bool GIO_5500_201706_C_exists = !GIO_5500_201706_C.empty();
+    
+    cout << "TXO_1000_201706_P exists: " << (TXO_1000_201706_P_exists ? "Yes" : "No") << endl;
+    cout << "TXO_9500_201706_C exists: " << (TXO_9500_201706_C_exists ? "Yes" : "No") << endl;
+    cout << "GIO_5500_201706_C exists: " << (GIO_5500_201706_C_exists ? "Yes" : "No") << endl;
 
-    size = TXO_9900_201705_C.size();
-    Heap<k_Bar> k_Heap(size);
-    for(auto& it:TXO_9900_201705_C){
+    // 針對 TXO_9900_201705_C 的操作
+    // 找到10個最小價格和最大價格及其時間
+    Heap<k_Bar> k_Heap(TXO_9900_201705_C.size());
+    for(auto& it: TXO_9900_201705_C) {
         k_Heap.push(it);
     }
-    cout<<k_Heap.top()<<endl;
-    cout<<endl;
+
+    cout << "Top 10 smallest prices with times:" << endl;
     k_Heap.sort();
-    // int n=k_Heap.size();
-    cout<<"small K"<<endl;
-    for(int i=0;i<10;i++){// small K
-        cout<<k_Heap[i]<<endl;
+    for(int i = 0; i < 10 && i < k_Heap.size(); i++) {
+        cout << k_Heap[i] << endl;
     }
-    cout<<endl;
-    cout<<"large K"<<endl;
-    for(int i=size-10;i<size;i++){// large K
-        cout<<k_Heap[i]<<endl;
+    cout << endl;
+
+    cout << "Top 10 largest prices with times:" << endl;
+    for(int i = k_Heap.size() - 10; i < k_Heap.size(); i++) {
+        cout << k_Heap[i] << endl;
     }
-    cout<<endl;
+    cout << endl;
+
+    // 中位價格
+    float median_price;
+    int mid_index = k_Heap.size() / 2;
+    if (k_Heap.size() % 2 == 0) {
+        median_price = (k_Heap[mid_index - 1].get_transactionPrice() + k_Heap[mid_index].get_transactionPrice()) / 2;
+    } else {
+        median_price = k_Heap[mid_index].get_transactionPrice();
+    }
+    cout << "Median price: " << median_price << endl;
+
+    // 計算逐筆返回並找到最大和最小返回
+    float max_return = -1e9, min_return = 1e9;
+    int max_return_index = -1, min_return_index = -1;
+    for (int i = 1; i < k_Heap.size(); i++) {
+        float return_value = (k_Heap[i].get_transactionPrice() - k_Heap[i - 1].get_transactionPrice()) / k_Heap[i - 1].get_transactionPrice();
+        if (return_value > max_return) {
+            max_return = return_value;
+            max_return_index = i;
+        }
+        if (return_value < min_return) {
+            min_return = return_value;
+            min_return_index = i;
+        }
+    }
+
+    cout << "Max return: " << max_return << " at " << k_Heap[max_return_index].getDate() << endl;
+    cout << "Min return: " << min_return << " at " << k_Heap[min_return_index].getDate() << endl;
 
     return 0;
 }

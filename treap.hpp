@@ -29,8 +29,8 @@ class Treap{
         node *left;
         node *right;
 
-        node(): left(nullptr),right(nullptr),size(1),lazy_Tag(0){}
-        node(T __value,int __priority, long long __index):value(__value),priority(__priority),index(__index),size(1),lazy_Tag(0),max_Value(__value),left(nullptr),right(nullptr){}
+        node(): left(nullptr),right(nullptr),size(1),lazy_Tag(0){srand(time(0));}
+        node(T __value,int __priority, long long __index):value(__value),priority(__priority),index(__index),size(1),lazy_Tag(0),max_Value(__value),left(nullptr),right(nullptr){srand(time(0));}
         void swap(node* a,node* b){
             T tmp = a->value;
             a->value = b->value;
@@ -57,19 +57,9 @@ class Treap{
         cur->lazy_Tag = 0;
     }
     void push(node* cur){
-        if(cur->lazy_Tag){
-            if(cur->left){
-                cur->left->value += cur->lazy_Tag;
-                cur->left->max_Value += cur->lazy_Tag;
-                cur->left->lazy_Tag += cur->lazy_Tag;
-            }
-            if(cur->right){
-                cur->right->value += cur->lazy_Tag;
-                cur->right->max_Value += cur->lazy_Tag;
-                cur->right->lazy_Tag += cur->lazy_Tag;
-            }
-            cur->lazy_Tag = 0;
-        }
+        // if(cur->lazy_Tag){
+            
+        // }
     }
     void merge(node* &cur,node* a,node* b){
         if(!a||!b){
@@ -134,11 +124,26 @@ class Treap{
     void insert(T value){
         insert(value,rand(),n++);
     }
-    T get_Max(){
+    T top(){
         return get_Max(root);
     }
     int size(){
         return n;
+    }
+    void sort(){
+        // root = nullptr;
+        // for(int i = 0; i < n; i++){
+        //     insert(get_Max(root));
+        // }
+    }
+    T operator[](int index){
+        node *a,*b,*c;
+        split_By_Index(root,a,b,index-1);
+        split_By_Index(b,b,c,index);
+        T ret = b->value;
+        merge(root,a,b);
+        merge(root,root,c);
+        return ret;
     }
     friend ostream& operator<<(ostream& os, const Treap& treap){
         treap.print(treap.root);
@@ -155,17 +160,17 @@ class Treap{
 
 };
 
-int main(){
-    srand(time(0));
-    Treap<int> treap;
-    for(int i = 0; i < 1000; i++){
-        treap.insert(rand()%10000000);
-    }
-    cout << treap.size() << endl;
-    cout << treap << endl;
-    cout << treap.get_Max()<<endl;
-    return 0;
-}
+// int main(){
+
+//     Treap<int> treap;
+//     for(int i = 0; i < 1000; i++){
+//         treap.insert(rand()%10000000);
+//     }
+//     cout << treap.size() << endl;
+//     cout << treap << endl;
+//     cout << treap.get_Max()<<endl;
+//     return 0;
+// }
 
 
 #endif

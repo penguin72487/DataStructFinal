@@ -38,7 +38,7 @@ public:
     }
     bool operator!=(const heap_Value& b) const override {
         const k_Bar& k = dynamic_cast<const k_Bar&>(b);
-        return transactionPrice != k.transactionPrice || Date != k.Date;
+        return Date != k.Date || name != k.name || exercisePrice != k.exercisePrice || expirationDate != k.expirationDate || callPut != k.callPut || transactionTime != k.transactionTime || transactionPrice != k.transactionPrice || transactionVolume != k.transactionVolume || openingAuctionPrice != k.openingAuctionPrice;
     }
     bool operator<(const heap_Value& b) const override {
         const k_Bar& k = dynamic_cast<const k_Bar&>(b);

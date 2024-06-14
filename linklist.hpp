@@ -132,6 +132,16 @@ class linklist{
         tail = nullptr;
         n = 0;
     }
+    linklist& operator=(const linklist& rhs){
+        if(this==&rhs){
+            return *this;
+        }
+        clear();
+        for(auto& it:rhs){
+            push_back(it);
+        }
+        return *this;
+    }
     friend ostream& operator<<(ostream& os, const linklist& ll){
         for(auto& it:ll){
             os<<it<<" ";

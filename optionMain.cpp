@@ -167,6 +167,7 @@ int main() {
     file.close();
 
     ////////////////////////////////////////////////////////////////////////////////////////////
+    freopen("P2out/output.txt", "w", stdout);
     //(1) 確定這五個數據集中總共有多少獨特的產品。
     cout << "Total number of unique products: " << all_products.size() << endl;
     // 確定特定產品是否存在

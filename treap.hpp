@@ -145,27 +145,37 @@ public:
         treap.print(treap.root);
         return os;
     }
-
-    void print_Small_K(int k){
-        node *a,*b;
-        split_By_Size(root,a,b,k);
-        print(a);
-        cout << endl;
-        merge(root,a,b);
+    void slip_By_Value(Treap<T>& a, Treap<T>& b, T value){
+        node *a_root = nullptr, *b_root = nullptr;
+        split_By_Value(root, a_root, b_root, value);
+        a.root = a_root;
+        b.root = b_root;
+        a.n = get_Size(a_root);
+        b.n = get_Size(b_root);
     }
-    void print_Big_K(int k){
-        node *a,*b;
-        split_By_Size(root,a,b,n-k);
-        print(b);
-        cout << endl;
-        merge(root,a,b);
+    void slip_By_Size(Treap<T>& a, Treap<T>& b, int k){
+        node *a_root = nullptr, *b_root = nullptr;
+        split_By_Size(root, a_root, b_root, k);
+        a.root = a_root;
+        b.root = b_root;
+        a.n = get_Size(a_root);
+        b.n = get_Size(b_root);
+
+    }
+    void merge(Treap<T>& a, Treap<T>& b){
+        node *a_root = a.root, *b_root = b.root;
+        merge(root, a_root, b_root);
+        a.root = b.root = nullptr;
+        n = get_Size(root);
+        a.n = get_Size(a_root);
+        b.n = get_Size(b_root);
     }
     void print(node* cur) const {
         if(cur == nullptr){
             return;
         }
         print(cur->left);
-        cout << cur->value << " ";
+        cout << cur->value <<endl;
         print(cur->right);
     }
     T operator[](int index){

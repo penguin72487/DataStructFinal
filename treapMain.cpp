@@ -1,7 +1,7 @@
-#include "treap.hpp"
+#include "Treap.hpp"
 #include "linklist.hpp"
 #include <iostream>
-#include <iomanip>
+#include <iomani
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -102,17 +102,25 @@ int main() {
     }
     cout <<"1: " << treap.size() << endl;
     cout << "2: Small 10" << endl;
-    treap.print_Small_K(10);
+    Treap<k_Bar> a, b;
+    treap.slip_By_Size(a, b, 10);
+    cout << a << endl;
+    treap.merge(a, b);
     cout << "3: Big 10" << endl;
-    treap.print_Big_K(10);
+    treap.slip_By_Size(a, b, treap.size()-10);
+    cout << b << endl;
+    treap.merge(a, b);
+
     cout << "4: Median" << endl;
     if(treap.size()&1){
         cout << treap[treap.size()/2] << endl;
     }
     else{
-        cout << treap[treap.size()/2].get_close()+treap[treap.size()/2-1].get_close() << endl;
+        auto it = treap[treap.size()/2];
+        auto it2 = treap[treap.size()/2-1];
+        cout<<it<<it2;
+        cout << "Average: " << (it.get_close()+it2.get_close())/2 << endl;
     }
-
 
     return 0;
 }

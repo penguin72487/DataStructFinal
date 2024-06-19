@@ -13,6 +13,7 @@ public:
     virtual bool operator!=(const treap_Value &b) const = 0;
     virtual bool operator<(const treap_Value&) const = 0;
     virtual bool operator>(const treap_Value&) const = 0;
+    virtual bool operator==(const treap_Value& b) const=0;
     virtual ~treap_Value() = default;
 };
 
@@ -186,35 +187,35 @@ public:
 
 };
 
-int main(){
-    Treap<int> treap;
-    for(int i = 0; i < 1000; i++){
-        treap.insert(rand()%10000000);
-    }
-    cout << treap.size() << endl;
-    cout << treap << endl;
-    cout << "Small K" << endl;
-    treap.print_Small_K(10);
-    cout << endl;
-    cout << "Big K" << endl;
-    treap.print_Big_K(10);
-    cout << endl;
-    // int n = 7;
-    // for(int i = 0; i < n; i++){
-    //     treap.insert(i);
-    // }
-    // cout << treap << endl;
-    // cout <<"Size: " << treap.size() << endl;
-    // cout <<"middle: " << treap[n/2] << endl;
-    // cout<<"Small K" << endl;
-    // treap.print_Small_K(3);
-    // cout << endl;
-    // cout<<"Big K" << endl;
-    // treap.print_Big_K(3);
-    // cout << endl;
+// int main(){
+//     Treap<int> treap;
+//     for(int i = 0; i < 1000; i++){
+//         treap.insert(rand()%10000000);
+//     }
+//     cout << treap.size() << endl;
+//     cout << treap << endl;
+//     cout << "Small K" << endl;
+//     treap.print_Small_K(10);
+//     cout << endl;
+//     cout << "Big K" << endl;
+//     treap.print_Big_K(10);
+//     cout << endl;
+//     // int n = 7;
+//     // for(int i = 0; i < n; i++){
+//     //     treap.insert(i);
+//     // }
+//     // cout << treap << endl;
+//     // cout <<"Size: " << treap.size() << endl;
+//     // cout <<"middle: " << treap[n/2] << endl;
+//     // cout<<"Small K" << endl;
+//     // treap.print_Small_K(3);
+//     // cout << endl;
+//     // cout<<"Big K" << endl;
+//     // treap.print_Big_K(3);
+//     // cout << endl;
  
-    return 0;
-}
+//     return 0;
+// }
 
 
 #endif

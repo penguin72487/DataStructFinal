@@ -4,114 +4,93 @@
 #include <random>
 #include <ctime>
 using namespace std;
-#define endl "\n"
+
 class treap_Value {
 public:
-    virtual treap_Value& operator=(const treap_Value&) { // Heap custom class should be inherited from heap_Value
+    virtual treap_Value& operator=(const treap_Value&) {
         return *this;
     }
     virtual bool operator!=(const treap_Value &b) const = 0;
-    virtual bool operator<(const treap_Value&) const = 0;// follow the logic of < to make max heap reverse the logic of < to make min heap
-    virtual bool operator>(const treap_Value&) const = 0;// follow the logic of < to make max heap reverse the logic of < to make min heap
+    virtual bool operator<(const treap_Value&) const = 0;
+    virtual bool operator>(const treap_Value&) const = 0;
     virtual ~treap_Value() = default;
 };
 
-template<class T> // custom class should be inherited from heap_Value
-class Treap{
-    class node{
+template<class T>
+class Treap {
+private:
+    class node {
     public:
         T value;
         long long priority;
-        long long index;
         long long size;
-        int lazy_Tag;
-        T max_Value;
-        node *left;
-        node *right;
+        node *left, *right;
 
-        node(): left(nullptr),right(nullptr),size(1),lazy_Tag(0){}
-        node(T __value,int __priority, long long __index):value(__value),priority(__priority),index(__index),size(1),lazy_Tag(0),max_Value(__value),left(nullptr),right(nullptr){}
-        void swap(node* a,node* b){
-            T tmp = a->value;
-            a->value = b->value;
-            b->value = tmp;
-            int tmp2 = a->priority;
-            a->priority = b->priority;
-            b->priority = tmp2;
-        }
-
+        node(T __value, int __priority): value(__value), priority(__priority), size(1), left(nullptr), right(nullptr) {}
     };
+
     node *root;
     int n;
-    // void insert(T value,long long priority, int index){
-        
-    // }
-    long long get_Size(node* cur){
-        return cur? cur->size : 0;
+    mt19937 rng;  // 隨機數生成器
+    uniform_int_distribution<int> dist;  // 均勻分布
+
+    long long get_Size(node* cur) {
+        return cur ? cur->size : 0;
     }
-    T get_Max(node* cur){
-        return cur? cur->max_Value : T();
-    }
-    void pull(node* cur){
-        cur->max_Value = max(cur->value,max(get_Max(cur->left),get_Max(cur->right)));
-        cur->lazy_Tag = 0;
-    }
-    void push(node* cur){
-        if(cur->lazy_Tag){
-            if(cur->left){
-                cur->left->value += cur->lazy_Tag;
-                cur->left->max_Value += cur->lazy_Tag;
-                cur->left->lazy_Tag += cur->lazy_Tag;
-            }
-            if(cur->right){
-                cur->right->value += cur->lazy_Tag;
-                cur->right->max_Value += cur->lazy_Tag;
-                cur->right->lazy_Tag += cur->lazy_Tag;
-            }
-            cur->lazy_Tag = 0;
+
+    void push_Up(node* cur) {
+        if(cur != nullptr) {
+            cur->size = get_Size(cur->left) + get_Size(cur->right) + 1;
         }
     }
-    void merge(node* &cur,node* a,node* b){
-        if(!a||!b){
-            cur = a?a:b;
+
+    void merge(node* &cur, node* a, node* b) {
+        if (!a || !b) {
+            cur = a ? a : b;
             return;
         }
-
-        if(a->priority > b->priority){
+        if (a->priority > b->priority) {
             cur = a;
-            push(cur);
-            merge(cur->right,a->right,b);
-            pull(cur);
-        }
-        else{
+            merge(cur->right, a->right, b);
+        } else {
             cur = b;
-            push(cur);
-            merge(cur->left,a,b->left);
-            pull(cur);
+            merge(cur->left, a, b->left);
         }
+        push_Up(cur);
     }
-    void split_By_Index(node* cur,node* &a,node* &b,long long index){
-        if(cur == nullptr){
+
+    void split_By_Value(node* cur, node* &a, node* &b, T value) {
+        if (cur == nullptr) {
             a = b = nullptr;
             return;
         }
-        if(cur->index <= index){
+        if (cur->value < value) {
             a = cur;
-            push(a);
-            split_By_Index(cur->right,a->right,b,index);
-            pull(a);
-        }
-        else{
+            split_By_Value(cur->right, a->right, b, value);
+            push_Up(a);
+        } else {
             b = cur;
-            push(b);
-            split_By_Index(cur->left,a,b->left,index);
-            pull(b);
+            split_By_Value(cur->left, a, b->left, value);
+            push_Up(b);
         }
     }
-    
-
-    void clear(node* &cur){
-        if(cur == nullptr){
+    void split_By_Size(node* cur, node* &a, node* &b, int k) {
+        if (cur == nullptr) {
+            a = b = nullptr;
+            return;
+        }
+        if (get_Size(cur->left) < k) {
+            a = cur;
+            split_By_Size(cur->right, a->right, b, k - get_Size(cur->left) - 1);
+            push_Up(a);
+        } else {
+            b = cur;
+            split_By_Size(cur->left, a, b->left, k);
+            push_Up(b);
+        }
+    }
+    void clear(node* &cur) {
+        if (cur == nullptr) {
             return;
         }
         clear(cur->left);
@@ -119,23 +98,44 @@ class Treap{
         delete cur;
         cur = nullptr;
     }
-    void insert(T value,long long priority, long long index){
-        node *a,*b;
-        split_By_Index(root,a,b,index);
-        node *cur = new node(value,priority,index);
-        merge(a,a,cur);
-        merge(root,a,b);
+    void insert(T value, int priority) {
+        node *a, *b;
+        split_By_Value(root, a, b, value);
+        node *new_node = new node(value, priority);
+        merge(a, a, new_node);
+        merge(root, a, b);
     }
-    public:
-    Treap():root(nullptr),n(0){}
-    ~Treap(){
+
+public:
+    Treap(): root(nullptr), n(0), rng(random_device{}()), dist(1, 10000000) {}
+
+    void insert(T value) {
+        if (find(value)) {
+            return;
+        }
+        insert(value, dist(rng));  // 使用更好的隨機數生成器
+        n++;
+    }
+
+    ~Treap() {
         clear(root);
     }
-    void insert(T value){
-        insert(value,rand(),n++);
-    }
-    T get_Max(){
-        return get_Max(root);
+    bool find(T value)
+    {
+        node* cur = root;
+        while(cur){
+            if(cur->value == value){
+                return true;
+            }
+            if(cur->value < value){
+                cur = cur->right;
+            }
+            else{
+                cur = cur->left;
+            }
+        }
+        return false;
+        
     }
     int size(){
         return n;
@@ -143,6 +143,21 @@ class Treap{
     friend ostream& operator<<(ostream& os, const Treap& treap){
         treap.print(treap.root);
         return os;
+    }
+
+    void print_Small_K(int k){
+        node *a,*b;
+        split_By_Size(root,a,b,k);
+        print(a);
+        cout << endl;
+        merge(root,a,b);
+    }
+    void print_Big_K(int k){
+        node *a,*b;
+        split_By_Size(root,a,b,n-k);
+        print(b);
+        cout << endl;
+        merge(root,a,b);
     }
     void print(node* cur) const {
         if(cur == nullptr){
@@ -152,18 +167,52 @@ class Treap{
         cout << cur->value << " ";
         print(cur->right);
     }
+    T operator[](int index){
+        node *cur = root;
+        while(cur){
+            if(get_Size(cur->left) == index){
+                return cur->value;
+            }
+            if(get_Size(cur->left) < index){
+                index -= get_Size(cur->left) + 1;
+                cur = cur->right;
+            }
+            else{
+                cur = cur->left;
+            }
+        }
+        return cur->value;
+    }
 
 };
 
 int main(){
-    srand(time(0));
     Treap<int> treap;
     for(int i = 0; i < 1000; i++){
         treap.insert(rand()%10000000);
     }
     cout << treap.size() << endl;
     cout << treap << endl;
-    cout << treap.get_Max()<<endl;
+    cout << "Small K" << endl;
+    treap.print_Small_K(10);
+    cout << endl;
+    cout << "Big K" << endl;
+    treap.print_Big_K(10);
+    cout << endl;
+    // int n = 7;
+    // for(int i = 0; i < n; i++){
+    //     treap.insert(i);
+    // }
+    // cout << treap << endl;
+    // cout <<"Size: " << treap.size() << endl;
+    // cout <<"middle: " << treap[n/2] << endl;
+    // cout<<"Small K" << endl;
+    // treap.print_Small_K(3);
+    // cout << endl;
+    // cout<<"Big K" << endl;
+    // treap.print_Big_K(3);
+    // cout << endl;
+ 
     return 0;
 }
 

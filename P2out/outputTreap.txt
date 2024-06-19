@@ -1,0 +1,17 @@
+Treap
+totle number of unique products: 1014
+totle number of transactions: 443749
+TXO_1000_201706_P exists?: 
+0
+TXO_9500_201706_C exists?: 
+0
+TXO_5500_201706_C exists?: 
+0
+TXO_9900_201705_C
+0
+Small 10
+
+Big 10
+
+Middle
+

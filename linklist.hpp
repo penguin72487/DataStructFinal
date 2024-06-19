@@ -1,4 +1,5 @@
 # ifndef LINKLIST_HPP__
+#define LINKLIST_HPP__
 #include <iostream>
 using namespace std;
 #define endl "\n"
@@ -140,23 +141,12 @@ class linklist{
         tail = nullptr;
         n = 0;
     }
-    linklist& operator=(const linklist& rhs){
-        if(this==&rhs){
-            return *this;
-        }
-        clear();
-        for(auto& it:rhs){
-            push_back(it);
-        }
-        return *this;
-    }
     friend ostream& operator<<(ostream& os, const linklist& ll){
         for(auto& it:ll){
-            os<< it<< endl;
+            os<<it<<" ";
         }
         return os;
     }
 
 };
-
 #endif

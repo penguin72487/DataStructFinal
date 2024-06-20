@@ -5,7 +5,7 @@
 寫報告 @提醒我打程式
 # request
 
-[原文](NUK\Final\finalProject.pdf)  
+[原文](finalProject.pdf)  
 數據結構期末專案  
 截止日期：2024年6月21日  
 

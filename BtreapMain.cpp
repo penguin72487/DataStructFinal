@@ -7,7 +7,7 @@
 #include <sstream>
 using namespace std;
 #define endl "\n"
-class k_Bar : public treap_Value {
+class k_Bar_Date : public treap_Value {
     int Date;
     public:
         float open;
@@ -15,11 +15,11 @@ class k_Bar : public treap_Value {
     float Low;
     float close;
 public:
-    k_Bar() : Date(0), open(0), High(0), Low(0), close(0) {}
-    k_Bar(int _Date, float _open, float _High, float _Low, float _close) : Date(_Date), open(_open), High(_High), Low(_Low), close(_close) {}
+    k_Bar_Date() : Date(0), open(0), High(0), Low(0), close(0) {}
+    k_Bar_Date(int _Date, float _open, float _High, float _Low, float _close) : Date(_Date), open(_open), High(_High), Low(_Low), close(_close) {}
     treap_Value& operator=(const treap_Value& other) override {
         if (this != &other) {
-            const k_Bar &k = dynamic_cast<const k_Bar &>(other);
+            const k_Bar_Date &k = dynamic_cast<const k_Bar_Date &>(other);
             Date = k.Date;
             open = k.open;
             High = k.High;
@@ -29,24 +29,24 @@ public:
         return *this;
     }
     bool operator!=(const treap_Value& b) const override {
-        const k_Bar& k = dynamic_cast<const k_Bar&>(b);
+        const k_Bar_Date& k = dynamic_cast<const k_Bar_Date&>(b);
         return Date != k.Date || Date != k.Date;
     }
 
     bool operator<(const treap_Value& b) const override {
-        const k_Bar& k = dynamic_cast<const k_Bar&>(b);
+        const k_Bar_Date& k = dynamic_cast<const k_Bar_Date&>(b);
         if(Date < k.Date) return true;
         else if(Date == k.Date) return Date < k.Date;
         else return false;
     }
     bool operator>(const treap_Value& b) const override {
-        const k_Bar& k = dynamic_cast<const k_Bar&>(b);
+        const k_Bar_Date& k = dynamic_cast<const k_Bar_Date&>(b);
         if(Date > k.Date) return true;
         else if(Date == k.Date) return Date > k.Date;
         else return false;
     }
     bool operator==(const treap_Value& b) const override {
-        const k_Bar& k = dynamic_cast<const k_Bar&>(b);
+        const k_Bar_Date& k = dynamic_cast<const k_Bar_Date&>(b);
         return Date == k.Date && Date == k.Date;
     }
     float get_close() const {
@@ -59,7 +59,64 @@ public:
     float get_open() const {
         return open;
     }
-    friend ostream& operator<<(ostream& os, const k_Bar& k) {
+    friend ostream& operator<<(ostream& os, const k_Bar_Date& k) {
+        os << k.Date << " " << k.open << " " << k.High << " " << k.Low << " " << k.close;
+        return os;
+    }
+};
+class k_Bar_Close : public treap_Value {
+    int Date;
+    public:
+        float open;
+    float High;
+    float Low;
+    float close;
+public:
+    k_Bar_Close() : Date(0), open(0), High(0), Low(0), close(0) {}
+    k_Bar_Close(int _Date, float _open, float _High, float _Low, float _close) : Date(_Date), open(_open), High(_High), Low(_Low), close(_close) {}
+    treap_Value& operator=(const treap_Value& other) override {
+        if (this != &other) {
+            const k_Bar_Close &k = dynamic_cast<const k_Bar_Close &>(other);
+            Date = k.Date;
+            open = k.open;
+            High = k.High;
+            Low = k.Low;
+            close = k.close;
+        }
+        return *this;
+    }
+    bool operator!=(const treap_Value& b) const override {
+        const k_Bar_Close& k = dynamic_cast<const k_Bar_Close&>(b);
+        return close != k.close || Date != k.Date;
+    }
+
+    bool operator<(const treap_Value& b) const override {
+        const k_Bar_Close& k = dynamic_cast<const k_Bar_Close&>(b);
+        if(close < k.close) return true;
+        else if(close == k.close) return Date < k.Date;
+        else return false;
+    }
+    bool operator>(const treap_Value& b) const override {
+        const k_Bar_Close& k = dynamic_cast<const k_Bar_Close&>(b);
+        if(close > k.close) return true;
+        else if(close == k.close) return Date > k.Date;
+        else return false;
+    }
+    bool operator==(const treap_Value& b) const override {
+        const k_Bar_Close& k = dynamic_cast<const k_Bar_Close&>(b);
+        return close == k.close && Date == k.Date;
+    }
+    float get_close() const {
+        return close;
+    }
+    int get_Date() const {
+        return Date;
+    }
+
+    float get_open() const {
+        return open;
+    }
+    friend ostream& operator<<(ostream& os, const k_Bar_Close& k) {
         os << k.Date << " " << k.open << " " << k.High << " " << k.Low << " " << k.close;
         return os;
     }
@@ -69,7 +126,7 @@ int main() {
     //////////////////////////////////////////////////////////////////////////////////////input
     cin.tie(0)->sync_with_stdio(0);
     cout.tie(0);
-    linklist<k_Bar> k_line;
+    linklist<k_Bar_Date> k_line;
     
     ifstream file("datasets/problem1/TWII_withRepeatedData.csv");
     if (!file.is_open()) {
@@ -89,7 +146,7 @@ int main() {
         int Date;
         float open, High, Low, close;
         ss >> Date >> trash >> open >> trash >> High >> trash >> Low >> trash >> close;
-        k_line.push_back(k_Bar(Date, open, High, Low, close));
+        k_line.push_back(k_Bar_Date(Date, open, High, Low, close));
 
         
     }
@@ -99,22 +156,22 @@ int main() {
 
     // ////////////////////////////////////////////////////////////////////////////////////////////
     freopen("P1out/b/158outputTreap.txt", "w", stdout);
-    Treap<k_Bar> treapB;
+    Treap<k_Bar_Date> treapB;
     for (auto& it : k_line) {
         treapB.insert(it);
     }
-    Treap<k_Bar> treap;
+    Treap<k_Bar_Date> treap;
     int dat = 0;
-    linklist<k_Bar> toListB = treapB.toList();
+    linklist<k_Bar_Date> toListB = treapB.toList();
     for (auto& it : toListB) {
         if(dat%5==0){
-            treap.insert(k_Bar(it.get_Date(), it.open, it.High, it.Low, it.close));
+            treap.insert(k_Bar_Date(it.get_Date(), it.open, it.High, it.Low, it.close));
         }
         dat++;
     }
     cout <<"1: " << treap.size() << endl;
     cout << "8: " << endl;
-    linklist<k_Bar> toList = treap.toList();
+    linklist<k_Bar_Date> toList = treap.toList();
     float max5 =-1000000, min5 = 1000000;
 
     int i = 0;

@@ -88,45 +88,20 @@ int main() {
         char trash;
         int Date;
         float open, High, Low, close;
-        if (caseB_date %5 == 0){
         ss >> Date >> trash >> open >> trash >> High >> trash >> Low >> trash >> close;
         k_line.push_back(k_Bar(Date, open, High, Low, close));
-        }
-        caseB_date++;
+
+        
     }
 
     file.close();
 
 
     // ////////////////////////////////////////////////////////////////////////////////////////////
-    freopen("P1out/b/58outputTreap.txt", "w", stdout);
+    freopen("P1out/b/1outputTreap.txt", "w", stdout);
     Treap<k_Bar> treap;
     for (auto& it : k_line) {
         treap.insert(it);
     }
-
-    cout << "8: " << endl;
-    linklist<k_Bar> toList = treap.toList();
-    float max5 =-1000000, min5 = 1000000;
-    int i = 0;
-        double previous_close = 0;
-        for (auto& it : toList) {
-            if (i != 0) {
-                cout << it.get_Date() << " " << (it.get_close() - previous_close) / previous_close * 100 << endl;
-                if((it.get_close() - previous_close) / previous_close * 100 > max5){
-                    max5 = (it.get_close() - previous_close) / previous_close * 100;
-                }
-                if((it.get_close() - previous_close) / previous_close * 100 < min5){
-                    min5 = (it.get_close() - previous_close) / previous_close * 100;
-                }
-            }
-            previous_close = it.get_close();
-            i++;
-        }
-
-    cout << "5Max: " << max5 << endl;
-    cout << "5Min: " << min5 << endl;
-
-
-    return 0;
+    cout <<"1: " << treap.size() << " " << caseB_date << endl;
 }

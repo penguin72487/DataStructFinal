@@ -122,13 +122,13 @@ class Heap{// defalt max heap if want to make min heap, change the logic > to <
             pop();
         }
         n=tmp_Size;
-        for (int i = 1,j=1; i < n; ++i) {
+        int j = 1;
+        for (int i = 1; i < n; ++i) {
             if (root[i].value != root[i - 1].value) {
                 root[j++].value = root[i].value;
-                tmp_Size = j;
             }
         }
-        n=tmp_Size;
+        n=j-1;
 
         // return root;
         return;

@@ -121,31 +121,6 @@ int main() {
         cout<<it<<it2;
         cout << "Average: " << (it.get_close()+it2.get_close())/2 << endl;
     }
-    cout << "8: " << endl;
-    linklist<k_Bar> toList = treap.toList();
-    float max5 =-1000000, min5 = 1000000;
-    int i = 0;
-        double previous_close = 0;
-        for (auto& it : toList) {
-            if (i != 0) {
-                cout << it.get_Date() << " " << (it.get_close() - previous_close) / previous_close * 100 << endl;
-                if((it.get_close() - previous_close) / previous_close * 100 > max5){
-                    max5 = (it.get_close() - previous_close) / previous_close * 100;
-                }
-                if((it.get_close() - previous_close) / previous_close * 100 < min5){
-                    min5 = (it.get_close() - previous_close) / previous_close * 100;
-                }
-            }
-            previous_close = it.get_close();
-            i++;
-        }
-    cout << "5Max: " << max5 << endl;
-    cout << "5Min: " << min5 << endl;
-    cout << "9: " << endl;
-    i = 0 ;
-    for(auto& it:toList){
-        cout << it.get_Date() << " " << (it.get_close() - it.get_open()) / it.get_open() * 100 << endl;
-        i++;
-    }
+
     return 0;
 }

@@ -96,7 +96,7 @@ int main() {
     file.close();
 
     // ////////////////////////////////////////////////////////////////////////////////////////////
-    freopen("P1out/b/1-6&10out.txt", "w", stdout);
+    freopen("P1out/a/1-6&10out.txt", "w", stdout);
 
     Heap<k_Bar> k_Heap(size);
     for(auto& it:k_line){
@@ -136,7 +136,7 @@ int main() {
     int max_index=0;
     int min_index=0;
     for(int i=1;i<size;i++){
-        float daily_return=(k_Heap[i].get_close()-k_Heap[i-1].get_close())/k_Heap[i-1].get_close()*100;
+        float daily_return=((k_Heap[i].get_close()-k_Heap[i-1].get_close())/k_Heap[i-1].get_close())*100;
         if(daily_return>max_return){
             max_return=daily_return;
             max_index=i;

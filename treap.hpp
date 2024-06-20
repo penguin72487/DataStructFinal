@@ -106,6 +106,16 @@ private:
         merge(a, a, new_node);
         merge(root, a, b);
     }
+    void copyTreap(node* &cur, node* other){
+        if(other == nullptr){
+            cur = nullptr;
+            return;
+        }
+        cur = new node(other->value, other->priority);
+        copyTreap(cur->left, other->left);
+        copyTreap(cur->right, other->right);
+        push_Up(cur);
+    }
 
 public:
     Treap(): root(nullptr), n(0), rng(random_device{}()), dist(1, 10000000) {}
@@ -162,13 +172,10 @@ public:
         b.n = get_Size(b_root);
 
     }
-    void merge(Treap<T>& a, Treap<T>& b){
-        node *a_root = a.root, *b_root = b.root;
+    void merge(Treap<T>& b){
+        node *a_root = root, *b_root = b.root;
         merge(root, a_root, b_root);
-        a.root = b.root = nullptr;
         n = get_Size(root);
-        a.n = get_Size(a_root);
-        b.n = get_Size(b_root);
     }
     void print(node* cur) const {
         if(cur == nullptr){
@@ -177,6 +184,20 @@ public:
         print(cur->left);
         cout << cur->value <<endl;
         print(cur->right);
+    }
+    void clear(){
+        // clear(root);
+        n = 0;
+        root = nullptr;
+    }
+    Treap& operator=(const Treap& other){
+        if(this != &other){
+            clear();
+            root = nullptr;
+            n = 0;
+            copyTreap(root, other.root);
+        }
+        return *this;
     }
     T operator[](int index){
         node *cur = root;

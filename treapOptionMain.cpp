@@ -43,15 +43,57 @@ public:
     }
     bool operator<(const treap_Value& b) const override {
         const k_Bar& k = dynamic_cast<const k_Bar&>(b);
-        if(transactionPrice < k.transactionPrice) return true;
-        else if(transactionPrice == k.transactionPrice) return Date < k.Date;
-        else return false;
+        // priorty name exercisePrice expirationDate callPut transactionTime transactionPrice transactionVolume openingAuctionPrice
+        if(name < k.name) return true;
+        else if(name == k.name) {
+            if(exercisePrice < k.exercisePrice) return true;
+            else if(exercisePrice == k.exercisePrice) {
+                if(expirationDate < k.expirationDate) return true;
+                else if(expirationDate == k.expirationDate) {
+                    if(callPut < k.callPut) return true;
+                    else if(callPut == k.callPut) {
+                        if(transactionTime < k.transactionTime) return true;
+                        else if(transactionTime == k.transactionTime) {
+                            if(transactionPrice < k.transactionPrice) return true;
+                            else if(transactionPrice == k.transactionPrice) {
+                                if(transactionVolume < k.transactionVolume) return true;
+                                else if(transactionVolume == k.transactionVolume) {
+                                    if(openingAuctionPrice < k.openingAuctionPrice) return true;
+                                    else return false;
+                                } else return false;
+                            } else return false;
+                        } else return false;
+                    } else return false;
+                } else return false;
+            } else return false;
+        } else return false;        
     }
     bool operator>(const treap_Value& b) const override {
         const k_Bar& k = dynamic_cast<const k_Bar&>(b);
-        if(transactionPrice > k.transactionPrice) return true;
-        else if(transactionPrice == k.transactionPrice) return Date > k.Date;
-        else return false;
+        // priorty name exercisePrice expirationDate callPut transactionTime transactionPrice transactionVolume openingAuctionPrice
+        if(name > k.name) return true;
+        else if(name == k.name) {
+            if(exercisePrice > k.exercisePrice) return true;
+            else if(exercisePrice == k.exercisePrice) {
+                if(expirationDate > k.expirationDate) return true;
+                else if(expirationDate == k.expirationDate) {
+                    if(callPut > k.callPut) return true;
+                    else if(callPut == k.callPut) {
+                        if(transactionTime > k.transactionTime) return true;
+                        else if(transactionTime == k.transactionTime) {
+                            if(transactionPrice > k.transactionPrice) return true;
+                            else if(transactionPrice == k.transactionPrice) {
+                                if(transactionVolume > k.transactionVolume) return true;
+                                else if(transactionVolume == k.transactionVolume) {
+                                    if(openingAuctionPrice > k.openingAuctionPrice) return true;
+                                    else return false;
+                                } else return false;
+                            } else return false;
+                        } else return false;
+                    } else return false;
+                } else return false;
+            } else return false;
+        } else return false;
     }
     bool operator==(const treap_Value& b) const override {
         const k_Bar& k = dynamic_cast<const k_Bar&>(b);
@@ -101,8 +143,8 @@ void option_Input(ifstream &file, Treap<k_Bar> &treap, Treap<string> &uniProduct
 }
 
 int main(){
-    cin.tie(0)->sync_with_stdio(0);
-    cout.tie(0);
+    // cin.tie(0)->sync_with_stdio(0);
+    // cout.tie(0);
     Treap<k_Bar> treap;
     Treap<string> uniProduct;
     ////2017_05_15
@@ -149,47 +191,41 @@ int main(){
     ////////////////////////////////////////////////////////////////////////////////////////////
     freopen("P2out/outputTreap.txt", "w", stdout);
     cout << "Treap" << endl;
+    // cout<<treap<<endl;
+    // cout<<uniProduct<<endl;
     cout<<"totle number of unique products: "<<uniProduct.size()<<endl;
     cout<<"totle number of transactions: "<<treap.size()<<endl;
     cout<<"TXO_1000_201706_P exists?: "<<endl;
-    Treap<k_Bar> a, b, c;
-    treap.slip_By_Value(a, b, k_Bar(0, "TXO", 1000, 201706, 'P', 0, 0, 0, 0));
-    treap.slip_By_Value(b, c, k_Bar(0, "TXO", 1000, 201706, 'P', FLT_MAX, 0, 0, 0));
-    cout<<b.size()<<endl;
-    a.merge(a,b);
-    treap.merge(a,c);
+    uniProduct.find("TXO 1000.000000 201706 P")? cout<<"Yes"<<endl: cout<<"No"<<endl;
     cout<<"TXO_9500_201706_C exists?: "<<endl;
-    treap.slip_By_Value(a, b, k_Bar(0, "TXO", 9500, 201706, 'C', 0, 0, 0, 0));
-    treap.slip_By_Value(b, c, k_Bar(0, "TXO", 9500, 201706, 'C', FLT_MAX, 0, 0, 0));
-    cout<<b.size()<<endl;
-    a.merge(a,b);
-    treap.merge(a,c);
+    uniProduct.find("TXO 9500.000000 201706 C")? cout<<"Yes"<<endl: cout<<"No"<<endl;
     cout<<"TXO_5500_201706_C exists?: "<<endl;
-    treap.slip_By_Value(a, b, k_Bar(0, "TXO", 5500, 201706, 'C', 0, 0, 0, 0));
-    treap.slip_By_Value(b, c, k_Bar(0, "TXO", 5500, 201706, 'C', FLT_MAX, 0, 0, 0));
-    cout<<b.size()<<endl;
-    a.merge(a,b);
-    treap.merge(a,c);
-
-    cout<<"TXO_9900_201705_C"<<endl;
+    uniProduct.find("TXO 5500.000000 201706 C")? cout<<"Yes"<<endl: cout<<"No"<<endl;
+    cout << "TXO_9900_201705_C exists?: " << endl;
+    uniProduct.find("TXO 9900.000000 201705 C")? cout<<"Yes"<<endl: cout<<"No"<<endl;
     Treap<k_Bar> TXO_9900_201705_C;
+    Treap<k_Bar> a, b;
     treap.slip_By_Value(a, TXO_9900_201705_C, k_Bar(0, "TXO", 9900, 201705, 'C', 0, 0, 0, 0));
-    treap.slip_By_Value(TXO_9900_201705_C, b, k_Bar(0, "TXO", 9900, 201705, 'C', FLT_MAX, 0, 0, 0));
+    treap.slip_By_Value(TXO_9900_201705_C, b, k_Bar(INT_MAX, "TXO", 9900, 201705, 'C', 0, FLT_MAX, 0, 0));
     cout<<TXO_9900_201705_C.size()<<endl;
+    cout<<TXO_9900_201705_C<<endl;
     Treap<k_Bar> e, f;
     TXO_9900_201705_C.slip_By_Size(e, f, 10);
     cout<<"Small 10"<<endl;
     cout<<e<<endl;
-    TXO_9900_201705_C.merge(e, f);
+    // TXO_9900_201705_C.merge(e);
+    e.clear();
+    f.clear();
     cout<<"Big 10"<<endl;
+
     TXO_9900_201705_C.slip_By_Size(e, f, TXO_9900_201705_C.size()-10);
     cout<<f<<endl;
-    TXO_9900_201705_C.merge(e, f);
+    // TXO_9900_201705_C.merge(e, f);
     cout<<"Middle"<<endl;
     // cout<<TXO_9900_201705_C[TXO_9900_201705_C.size()/2]<<endl;
 
 
-    cout<<a<<endl;
+    // cout<<treap<<endl;
     
 
 

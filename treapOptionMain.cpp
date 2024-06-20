@@ -221,7 +221,6 @@ int main(){
     TXO_9900_201705_C.slip_By_Size(e, f, TXO_9900_201705_C.size()-10);
     // cout<<"E"<<endl; // "E" is the name of the variable
     // cout<<e<<endl;
-    cout<<"First"<<endl;
     cout<<f<<endl;
     // TXO_9900_201705_C.merge(e, f);
     cout<<"Middle"<<endl;

@@ -105,4 +105,18 @@ clear() 清空
 cout<< 輸出  
 
 
+# Treap
+如果要自訂資料結構當數值，請繼承或是多型treap_Value 
+insert(T) 插入資料，而且不會重複資料。
+find(T)尋找某資料
+int size 回傳Treap大小
+slip_By_Value(Treap<T>& a, Treap<T>& b, T value)以小於某個數值切割當結尾切在左邊的a，剩下切在右邊的b
+slip_By_Size(Treap<T>& a, Treap<T>& b, int k)把K個數據切在左邊的a，剩下切在右邊的b
+ T operator[](int index) 輸出 index的數值
+linklist<T> toList()
+
+
+cout<< 中序輸出Treap
+
+
 

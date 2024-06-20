@@ -143,6 +143,14 @@ private:
         res.push_back(cur->value);
         toList(cur->right, res);
     }
+    void print(node* cur) const {
+        if(cur == nullptr){
+            return;
+        }
+        print(cur->left);
+        cout << cur->value <<endl;
+        print(cur->right);
+    }
 
 public:
     Treap(): root(nullptr), n(0), rng(random_device{}()), dist(1, 10000000) {}
@@ -203,33 +211,6 @@ public:
         b.n = get_Size(b_root);
 
     }
-    void merge(Treap<T>& b){
-        node *a_root = root, *b_root = b.root;
-        merge(root, a_root, b_root);
-        n = get_Size(root);
-    }
-    void print(node* cur) const {
-        if(cur == nullptr){
-            return;
-        }
-        print(cur->left);
-        cout << cur->value <<endl;
-        print(cur->right);
-    }
-    void clear(){
-        // clear(root);
-        n = 0;
-        root = nullptr;
-    }
-    // Treap& operator=(const Treap& other){
-    //     if(this != &other){
-    //         clear();
-    //         root = nullptr;
-    //         n = 0;
-    //         copyTreap(root, other.root);
-    //     }
-    //     return *this;
-    // }
     T operator[](int index){
         node *cur = root;
         while(cur){

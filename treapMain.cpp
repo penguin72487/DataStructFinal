@@ -95,7 +95,7 @@ int main() {
 
 
     // ////////////////////////////////////////////////////////////////////////////////////////////
-    // freopen("P1out/a/output1.txt", "w", stdout);
+    freopen("P1out/a/outputTreap.txt", "w", stdout);
     Treap<k_Bar> treap;
     for (auto& it : k_line) {
         treap.insert(it);
@@ -124,6 +124,11 @@ int main() {
         auto it2 = treap[treap.size()/2-1];
         cout<<it<<it2;
         cout << "Average: " << (it.get_close()+it2.get_close())/2 << endl;
+    }
+    cout << "Linklist" << endl;
+    linklist<k_Bar> toList = treap.toList();
+    for(auto& it : toList){
+        cout << it << endl;
     }
 
     return 0;

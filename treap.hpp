@@ -1,5 +1,6 @@
 #ifndef __TREAP_HPP__
 #define __TREAP_HPP__
+#include "linklist.hpp"
 #include <iostream>
 #include <random>
 #include <ctime>
@@ -134,6 +135,14 @@ private:
         cur->right = copyRoot(cur->right, other->right);
         return cur;
     }
+    void toList(node* cur, linklist<T>& res){
+        if(cur == nullptr){
+            return;
+        }
+        toList(cur->left, res);
+        res.push_back(cur->value);
+        toList(cur->right, res);
+    }
 
 public:
     Treap(): root(nullptr), n(0), rng(random_device{}()), dist(1, 10000000) {}
@@ -212,15 +221,15 @@ public:
         n = 0;
         root = nullptr;
     }
-    Treap& operator=(const Treap& other){
-        if(this != &other){
-            clear();
-            root = nullptr;
-            n = 0;
-            copyTreap(root, other.root);
-        }
-        return *this;
-    }
+    // Treap& operator=(const Treap& other){
+    //     if(this != &other){
+    //         clear();
+    //         root = nullptr;
+    //         n = 0;
+    //         copyTreap(root, other.root);
+    //     }
+    //     return *this;
+    // }
     T operator[](int index){
         node *cur = root;
         while(cur){
@@ -237,6 +246,12 @@ public:
         }
         return cur->value;
     }
+    linklist<T> toList(){
+        linklist<T> res;
+        toList(root, res);
+        return res;
+    }
+
 
 };
 

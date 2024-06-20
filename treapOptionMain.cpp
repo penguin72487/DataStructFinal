@@ -12,7 +12,7 @@ class k_Bar : public treap_Value {
     int Date;
     string name;
     float exercisePrice;
-    int expirationDate; // month
+    string expirationDate; // month
     char callPut; // C or P
     float transactionTime;
     float transactionPrice;
@@ -20,8 +20,8 @@ class k_Bar : public treap_Value {
     float openingAuctionPrice;
 
 public:
-    k_Bar() : Date(0), name(""), exercisePrice(0), expirationDate(0), callPut('\0'), transactionTime(0), transactionPrice(0), transactionVolume(0), openingAuctionPrice(0) {}
-    k_Bar(int _Date, string _name,  float _exercisePrice, int _expirationDate, char _callPut, float _transactionTime, float _transactionPrice, float _transactionVolume, float _openingAuctionPrice) : Date(_Date), name(_name), exercisePrice(_exercisePrice), expirationDate(_expirationDate), callPut(_callPut), transactionTime(_transactionTime), transactionPrice(_transactionPrice), transactionVolume(_transactionVolume), openingAuctionPrice(_openingAuctionPrice) {}
+    k_Bar() : Date(0), name(""), exercisePrice(0), expirationDate("0"), callPut('\0'), transactionTime(0), transactionPrice(0), transactionVolume(0), openingAuctionPrice(0) {}
+    k_Bar(int _Date, string _name,  float _exercisePrice, string _expirationDate, char _callPut, float _transactionTime, float _transactionPrice, float _transactionVolume, float _openingAuctionPrice) : Date(_Date), name(_name), exercisePrice(_exercisePrice), expirationDate(_expirationDate), callPut(_callPut), transactionTime(_transactionTime), transactionPrice(_transactionPrice), transactionVolume(_transactionVolume), openingAuctionPrice(_openingAuctionPrice) {}
     treap_Value& operator=(const treap_Value& other) override {
         if (this != &other) {
             const k_Bar& k = dynamic_cast<const k_Bar&>(other);
@@ -130,7 +130,7 @@ void option_Input(ifstream &file, Treap<k_Bar> &treap, Treap<string> &uniProduct
         int Date;
         string name;
         float exercisePrice;
-        int expirationDate; // month
+        string expirationDate; // month
         char callPut; // C or P
         float transactionTime;
         float transactionPrice;
@@ -138,7 +138,10 @@ void option_Input(ifstream &file, Treap<k_Bar> &treap, Treap<string> &uniProduct
         float openingAuctionPrice;
         ss >> Date >> trash >> name >> trash >> exercisePrice >> trash >> expirationDate >> trash >> callPut >> trash >> transactionTime >> trash >> transactionPrice >> trash >> transactionVolume >> trash >> openingAuctionPrice;
         treap.insert(k_Bar(Date, name, exercisePrice, expirationDate, callPut, transactionTime, transactionPrice, transactionVolume, openingAuctionPrice));
-        uniProduct.insert(name+" "+to_string(exercisePrice)+" "+to_string(expirationDate)+" "+callPut);
+        uniProduct.insert(name+" "+to_string(exercisePrice)+" "+expirationDate+" "+callPut);
+        if(callPut == '4')
+            cout << Date << " " << name << " " << exercisePrice << " " << expirationDate << " " << callPut << " " << transactionTime << " " << transactionPrice << " " << transactionVolume << " " << openingAuctionPrice << endl;
+
     }
 }
 
@@ -205,10 +208,10 @@ int main(){
     uniProduct.find("TXO 9900.000000 201705 C")? cout<<"Yes"<<endl: cout<<"No"<<endl;
     Treap<k_Bar> TXO_9900_201705_C;
     Treap<k_Bar> a, b;
-    treap.slip_By_Value(a, TXO_9900_201705_C, k_Bar(0, "TXO", 9900, 201705, 'C', 0, 0, 0, 0));
+    treap.slip_By_Value(a, TXO_9900_201705_C, k_Bar(0, "TXO", 9900, "201705", 'C', 0, 0, 0, 0));
     // cout<<TXO_9900_201705_C.size()<<endl;
     // cout<<TXO_9900_201705_C<<endl;
-    TXO_9900_201705_C.slip_By_Value(TXO_9900_201705_C, b, k_Bar(0, "TXO", 9900, 201705, 'C', 0, FLT_MAX, 0, 0));
+    TXO_9900_201705_C.slip_By_Value(TXO_9900_201705_C, b, k_Bar(0, "TXO", 9900, "201705", 'C', 0, FLT_MAX, 0, 0));
     cout<<TXO_9900_201705_C.size()<<endl;
     // cout<<TXO_9900_201705_C<<endl;
     Treap<k_Bar> e, f;
@@ -233,6 +236,13 @@ int main(){
         cout << it << endl<< it2<<endl;
         cout<<"Average: "<<(it.get_transactionPrice()+it2.get_transactionPrice())/2<<endl;
     }
+
+    linklist<k_Bar> k_line=TXO_9900_201705_C.toList();
+    cout<<"List"<<endl;
+    for(auto& it:k_line){
+        cout<<it<<endl;
+    }
+    
 
     // cout<<treap<<endl;
     

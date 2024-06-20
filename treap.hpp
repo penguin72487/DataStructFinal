@@ -80,18 +80,36 @@ private:
             a = b = nullptr;
             return;
         }
-        if (get_Size(cur->left) < k) {
+        if(get_Size(cur)==k){
             a = cur;
-            split_By_Size(cur->right, a->right, b, k - get_Size(cur->left) - 1);
+            b = nullptr;
             push_Up(a);
-        } else {
+            push_Up(b);
+            return;
+        }
+        if(get_Size(cur->left)+1==k)
+        {
+            a = cur;
+            b = cur->right;
+            a->right = nullptr;
+            push_Up(a);
+            push_Up(b);
+            return;
+        }
+        if(get_Size(cur->left)+1< k){
+            a = cur;
+            split_By_Size(cur->right, a->right, b, k-get_Size(cur->left)-1);
+            push_Up(a);
+        }
+        else{
             b = cur;
             split_By_Size(cur->left, a, b->left, k);
             push_Up(b);
         }
+
     }
     void clear(node* &cur) {
-        if (cur == nullptr) {
+        if (!cur) {
             return;
         }
         clear(cur->left);
@@ -106,15 +124,15 @@ private:
         merge(a, a, new_node);
         merge(root, a, b);
     }
-    void copyTreap(node* &cur, node* other){
+    node* copyRoot(node* &cur, node* other){
         if(other == nullptr){
-            cur = nullptr;
-            return;
+            return nullptr;
         }
         cur = new node(other->value, other->priority);
-        copyTreap(cur->left, other->left);
-        copyTreap(cur->right, other->right);
-        push_Up(cur);
+        cur->size = other->size;
+        cur->left = copyRoot(cur->left, other->left);
+        cur->right = copyRoot(cur->right, other->right);
+        return cur;
     }
 
 public:
@@ -157,7 +175,9 @@ public:
     }
     void slip_By_Value(Treap<T>& a, Treap<T>& b, T value){
         node *a_root = nullptr, *b_root = nullptr;
-        split_By_Value(root, a_root, b_root, value);
+        node *tmp_root;
+        copyRoot(tmp_root, root);
+        split_By_Value(tmp_root, a_root, b_root, value);
         a.root = a_root;
         b.root = b_root;
         a.n = get_Size(a_root);
@@ -165,7 +185,9 @@ public:
     }
     void slip_By_Size(Treap<T>& a, Treap<T>& b, int k){
         node *a_root = nullptr, *b_root = nullptr;
-        split_By_Size(root, a_root, b_root, k);
+        node *tmp_root;
+        copyRoot(tmp_root, root);
+        split_By_Size(tmp_root, a_root, b_root, k);
         a.root = a_root;
         b.root = b_root;
         a.n = get_Size(a_root);
@@ -219,18 +241,18 @@ public:
 };
 
 // int main(){
-//     Treap<int> treap;
-//     for(int i = 0; i < 1000; i++){
-//         treap.insert(rand()%10000000);
-//     }
-//     cout << treap.size() << endl;
-//     cout << treap << endl;
-//     cout << "Small K" << endl;
-//     treap.print_Small_K(10);
-//     cout << endl;
-//     cout << "Big K" << endl;
-//     treap.print_Big_K(10);
-//     cout << endl;
+//     // Treap<int> treap;
+//     // for(int i = 0; i < 1000; i++){
+//     //     treap.insert(rand()%10000000);
+//     // }
+//     // cout << treap.size() << endl;
+//     // cout << treap << endl;
+//     // cout << "Small K" << endl;
+//     // treap.print_Small_K(10);
+//     // cout << endl;
+//     // cout << "Big K" << endl;
+//     // treap.print_Big_K(10);
+//     // cout << endl;
 //     // int n = 7;
 //     // for(int i = 0; i < n; i++){
 //     //     treap.insert(i);
@@ -239,10 +261,17 @@ public:
 //     // cout <<"Size: " << treap.size() << endl;
 //     // cout <<"middle: " << treap[n/2] << endl;
 //     // cout<<"Small K" << endl;
-//     // treap.print_Small_K(3);
+//     // Treap<int> a, b;
+//     // treap.slip_By_Size(a, b, 3);
+//     // cout << a << endl;
+//     // // a.clear();
+//     // // b.clear();
 //     // cout << endl;
 //     // cout<<"Big K" << endl;
-//     // treap.print_Big_K(3);
+//     // treap.slip_By_Size(a, b, n-3);
+//     // cout << b << endl;
+//     // a.clear();
+//     // b.clear();
 //     // cout << endl;
  
 //     return 0;

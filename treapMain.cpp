@@ -105,15 +105,10 @@ int main() {
     Treap<k_Bar> a, b;
     treap.slip_By_Size(a, b, 10);
     cout << a << endl;
-    // treap.merge(a, b);
-    a.clear();
-    b.clear();
+
     cout << "3: Big 10" << endl;
     treap.slip_By_Size(a, b, treap.size()-10);
     cout << b << endl;
-    a.clear();
-    b.clear();
-    // treap.merge(a, b);
 
     cout << "4: Median" << endl;
     if(treap.size()&1){

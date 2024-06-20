@@ -400,7 +400,7 @@ int main() {
     
     int i = 0;
         double previous_close = 0;
-        for (auto& it : toListB) {
+        for (auto& it : toList_Date) {
             if (i != 0) {
                 cout << it.get_Date() << " " << (it.get_close() - previous_close) / previous_close * 100 << endl;
                 if((it.get_close() - previous_close) / previous_close * 100 > max5){
@@ -422,7 +422,7 @@ int main() {
     float max6 =-1000000, min6 = 1000000;
     toList_Date = treap_Date.toList();
     i = 0;
-        for (auto& it : toListB) {
+        for (auto& it : toList_Date) {
             if (i != 0) {
                 cout << it.get_Date() << " " << (it.get_close() - it.open) / it.open * 100 << endl;
                 if((it.get_close() - it.open) / it.open * 100 > max5){

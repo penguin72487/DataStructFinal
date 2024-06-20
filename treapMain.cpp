@@ -100,6 +100,7 @@ int main() {
     for (auto& it : k_line) {
         treap.insert(it);
     }
+    cout<<treap<<endl;
     cout <<"1: " << treap.size() << endl;
     cout << "2: Small 10" << endl;
     Treap<k_Bar> a, b;

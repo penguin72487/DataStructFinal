@@ -3,19 +3,31 @@
 #include <string>
 #include <algorithm>
 #include <time.h>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+
+#define FRONT_COLOUR sf::Color::Black
+#define BACK_COLOUR sf::Color::White
+
+#define IMG_HEIGHT 555
+#define IMG_WIDTH 1920
+
+#define FILENAME "B9"
+
+//讀取.exe同目錄下的 FILENAME.txt檔案
+
+
 
 int daysSinceEpoch(int date) {
     struct tm time_in = { 0, 0, 0, date % 100, (date / 100) % 100 - 1, date / 10000 - 1900 };
-    time_t time_temp = mktime(&time_in);
-
+    time_t tmp_t = mktime(&time_in);
     const time_t epoch = 0;
-    return difftime(time_temp, epoch) / (60 * 60 * 24);
+    return difftime(tmp_t, epoch) / (86400);//=60 * 60 * 24
 }
 
-sf::VertexArray createPolyline(const std::vector<sf::Vector2f>& points, float width, float height) {
+sf::VertexArray createXYLine(const std::vector<sf::Vector2f>& points) {
     sf::VertexArray lines(sf::LinesStrip, points.size());
-
-
     std::vector<sf::Vector2f> continuousPoints = points;
     int minDays = daysSinceEpoch(static_cast<int>(points[0].x));
 
@@ -23,44 +35,40 @@ sf::VertexArray createPolyline(const std::vector<sf::Vector2f>& points, float wi
         point.x = static_cast<float>(daysSinceEpoch(static_cast<int>(point.x)) - minDays);
     }
 
-
     float minX = std::min_element(continuousPoints.begin(), continuousPoints.end(), [](sf::Vector2f a, sf::Vector2f b) { return a.x < b.x; })->x;
     float maxX = std::max_element(continuousPoints.begin(), continuousPoints.end(), [](sf::Vector2f a, sf::Vector2f b) { return a.x < b.x; })->x;
     float minY = std::min_element(continuousPoints.begin(), continuousPoints.end(), [](sf::Vector2f a, sf::Vector2f b) { return a.y < b.y; })->y;
     float maxY = std::max_element(continuousPoints.begin(), continuousPoints.end(), [](sf::Vector2f a, sf::Vector2f b) { return a.y < b.y; })->y;
 
     for (size_t i = 0; i < continuousPoints.size(); ++i) {
-
         float normalizedX = (continuousPoints[i].x - minX) / (maxX - minX);
         float normalizedY = (continuousPoints[i].y - minY) / (maxY - minY);
 
-        float xPos = 50 + normalizedX * (width - 100);
-        float yPos = height - 50 - normalizedY * (height - 100);
+        float xPos = 50 + normalizedX * (IMG_WIDTH - 100);
+        float yPos = IMG_HEIGHT - 50 - normalizedY * (IMG_HEIGHT - 100);
 
         lines[i].position = sf::Vector2f(xPos, yPos);
-        lines[i].color = sf::Color::White;
+        lines[i].color = FRONT_COLOUR;
     }
 
     return lines;
 }
 
-sf::VertexArray createAxes(float width, float height) {
+sf::VertexArray createAxes() {
     sf::VertexArray axes(sf::Lines, 4);
-
-    axes[0].position = sf::Vector2f(50, height - 50);
-    axes[1].position = sf::Vector2f(width - 50, height - 50);
-
-    axes[2].position = sf::Vector2f(50, height - 50);
+    axes[0].position = sf::Vector2f(50, IMG_HEIGHT - 50);
+    axes[1].position = sf::Vector2f(IMG_WIDTH - 50, IMG_HEIGHT - 50);
+    axes[2].position = sf::Vector2f(50, IMG_HEIGHT - 50);
     axes[3].position = sf::Vector2f(50, 50);
 
     for (int i = 0; i < 4; ++i) {
-        axes[i].color = sf::Color::White;
+        axes[i].color = FRONT_COLOUR;
     }
 
     return axes;
 }
 
-void createLabels(sf::RenderWindow& window, float width, float height, const sf::Font& font, const std::vector<sf::Vector2f>& points) {
+void createLabels(sf::RenderTexture& texture, const sf::Font& font, const std::vector<sf::Vector2f>& points) {
     std::vector<sf::Vector2f> continuousPoints = points;
     int minDays = daysSinceEpoch(static_cast<int>(points[0].x));
 
@@ -82,61 +90,72 @@ void createLabels(sf::RenderWindow& window, float width, float height, const sf:
         dt = localtime(&rawtime);
         strftime(buffer, sizeof(buffer), "%Y%m%d", dt);
         sf::Text label(buffer, font, 15);
-        label.setFillColor(sf::Color::White);
-        label.setPosition(50 + i * (width - 100) / 10, height - 40);
-        window.draw(label);
+        label.setFillColor(FRONT_COLOUR);
+        label.setPosition(50 + i * (IMG_WIDTH - 100) / 10, IMG_HEIGHT - 40);
+        texture.draw(label);
     }
 
     for (int i = 0; i <= 10; ++i) {
         float yValue = minY + i * (maxY - minY) / 10;
         sf::Text label(std::to_string(static_cast<int>(yValue)), font, 15);
-        label.setFillColor(sf::Color::White);
-        label.setPosition(10, height - 50 - i * (height - 100) / 10 - 10);
-        window.draw(label);
+        label.setFillColor(FRONT_COLOUR);
+        label.setPosition(10, IMG_HEIGHT - 50 - i * (IMG_HEIGHT - 100) / 10 - 10);
+        texture.draw(label);
     }
 }
 
-int main() {
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Hello world");
+std::vector<sf::Vector2f> readDataFromFile() {
+    std::vector<sf::Vector2f> dataPoints;
+    std::ifstream file(FILENAME".txt");
+    if (!file.is_open()) {
+        std::cerr << "Open file" << FILENAME".txt" <<"failed\n" ;
+        return dataPoints;
+    }
 
-    // Load font
-    sf::Font font;
-    if (!font.loadFromFile("arial.ttf")) {
+    std::string line;
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        float x, y;
+        if (!(iss >> x >> y)) {
+            break;
+        }
+        dataPoints.emplace_back(x, y);
+    }
+
+    file.close();
+    return dataPoints;
+}
+
+
+int main() {
+    sf::RenderTexture texture;
+    if (!texture.create(IMG_WIDTH, IMG_HEIGHT)) {
         return -1;
     }
 
-    std::vector<sf::Vector2f> dataPoints = {
-        {19990105.f,6152.43},
-        {19990106.f,6199.91},
-        {19990107.f,6404.31},
-        {19990108.f,6421.75},
-        {19990111.f,6406.99},
-        {19990112.f,6363.89}
-    };
-
-    sf::VertexArray polyline = createPolyline(dataPoints, 1920, 1080);
-
-    sf::VertexArray axes = createAxes(1920, 1080);
-
-    // Main loop
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        window.clear();
-
-
-
-        window.draw(polyline);
-        window.draw(axes);
-
-        createLabels(window, 1920, 1080, font, dataPoints);
-
-        window.display();
+    sf::Font font;
+    if (!font.loadFromFile("Font.ttf")) {
+        return -2;
     }
 
+    std::vector<sf::Vector2f> dataPoints = readDataFromFile(  );
+    if (dataPoints.empty()) {
+        return -3;
+    }
+
+    sf::VertexArray polyline = createXYLine(dataPoints);
+    sf::VertexArray axes = createAxes();
+
+    texture.clear(BACK_COLOUR);
+    texture.draw(polyline);
+    texture.draw(axes);
+    createLabels(texture, font, dataPoints);
+    texture.display();
+
+    sf::Texture resultTexture = texture.getTexture();
+    sf::Image screenshot = resultTexture.copyToImage();
+    if (!screenshot.saveToFile(FILENAME".png")) {
+        return -4;
+    }
     return 0;
 }

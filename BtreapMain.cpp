@@ -30,24 +30,24 @@ public:
     }
     bool operator!=(const treap_Value& b) const override {
         const k_Bar& k = dynamic_cast<const k_Bar&>(b);
-        return close != k.close || Date != k.Date;
+        return Date != k.Date || Date != k.Date;
     }
 
     bool operator<(const treap_Value& b) const override {
         const k_Bar& k = dynamic_cast<const k_Bar&>(b);
-        if(close < k.close) return true;
-        else if(close == k.close) return Date < k.Date;
+        if(Date < k.Date) return true;
+        else if(Date == k.Date) return Date < k.Date;
         else return false;
     }
     bool operator>(const treap_Value& b) const override {
         const k_Bar& k = dynamic_cast<const k_Bar&>(b);
-        if(close > k.close) return true;
-        else if(close == k.close) return Date > k.Date;
+        if(Date > k.Date) return true;
+        else if(Date == k.Date) return Date > k.Date;
         else return false;
     }
     bool operator==(const treap_Value& b) const override {
         const k_Bar& k = dynamic_cast<const k_Bar&>(b);
-        return close == k.close && Date == k.Date;
+        return Date == k.Date && Date == k.Date;
     }
     float get_close() const {
         return close;
@@ -81,6 +81,7 @@ int main() {
     getline(file, header); // 讀取並忽略表頭行
     
     string line;
+    int caseB_date = 0;
     while (getline(file, line)) {
         stringstream ss(line);
         string item;
@@ -89,40 +90,33 @@ int main() {
         float open, High, Low, close;
         ss >> Date >> trash >> open >> trash >> High >> trash >> Low >> trash >> close;
         k_line.push_back(k_Bar(Date, open, High, Low, close));
+
+        
     }
 
     file.close();
 
 
     // ////////////////////////////////////////////////////////////////////////////////////////////
-    freopen("P1out/b/outputTreap.txt", "w", stdout);
-    Treap<k_Bar> treap;
+    freopen("P1out/b/158outputTreap.txt", "w", stdout);
+    Treap<k_Bar> treapB;
     for (auto& it : k_line) {
-        treap.insert(it);
+        treapB.insert(it);
+    }
+    Treap<k_Bar> treap;
+    int dat = 0;
+    linklist<k_Bar> toListB = treapB.toList();
+    for (auto& it : toListB) {
+        if(dat%5==0){
+            treap.insert(k_Bar(it.get_Date(), it.open, it.High, it.Low, it.close));
+        }
+        dat++;
     }
     cout <<"1: " << treap.size() << endl;
-    cout << "2: Small 10" << endl;
-    Treap<k_Bar> a, b;
-    treap.slip_By_Size(a, b, 10);
-    cout << a << endl;
-
-    cout << "3: Big 10" << endl;
-    treap.slip_By_Size(a, b, treap.size()-10);
-    cout << b << endl;
-
-    cout << "4: Median" << endl;
-    if(treap.size()&1){
-        cout << treap[treap.size()/2] << endl;
-    }
-    else{
-        auto it = treap[treap.size()/2];
-        auto it2 = treap[treap.size()/2-1];
-        cout<<it<<it2;
-        cout << "Average: " << (it.get_close()+it2.get_close())/2 << endl;
-    }
     cout << "8: " << endl;
     linklist<k_Bar> toList = treap.toList();
     float max5 =-1000000, min5 = 1000000;
+
     int i = 0;
         double previous_close = 0;
         for (auto& it : toList) {
@@ -138,13 +132,10 @@ int main() {
             previous_close = it.get_close();
             i++;
         }
+
     cout << "5Max: " << max5 << endl;
     cout << "5Min: " << min5 << endl;
-    cout << "9: " << endl;
-    i = 0 ;
-    for(auto& it:toList){
-        cout << it.get_Date() << " " << (it.get_close() - it.get_open()) / it.get_open() * 100 << endl;
-        i++;
-    }
+
+
     return 0;
 }

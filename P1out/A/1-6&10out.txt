@@ -29,8 +29,9 @@
 20100706 7548.48
 
 5:
-max_return: 1.70198 on 20010920
-min_return: 0 on 20030821
+
+max_return: 6.74218 on 20090430
+min_return: -6.67886 on 20040322
 
 6:
 max_return: 6.96365 on 20001121
@@ -45,3 +46,9 @@ max_low_price: 10096.5 on 20000211
 min_low_price: 3411.68 on 20010926
 max_close_price: 10202.2 on 20000217
 min_close_price: 3446.26 on 20011003
+mid_open_price: 7496.61 on 19990428
+mid_high_price: 7460.31 on 20111103
+mid_low_price: 7490.91 on 20091127
+mid_close_price: 7548.48 on 20100706
+
+

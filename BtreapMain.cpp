@@ -423,7 +423,6 @@ int main() {
     toList_Date = treap_Date.toList();
     i = 0;
         for (auto& it : toList_Date) {
-            if (i != 0) {
                 cout << it.get_Date() << " " << (it.get_close() - it.open) / it.open * 100 << endl;
                 if((it.get_close() - it.open) / it.open * 100 > max6){
                     max6 = (it.get_close() - it.open) / it.open * 100;
@@ -431,7 +430,7 @@ int main() {
                 if((it.get_close() - it.open) / it.open * 100 < min6){
                     min6 = (it.get_close() - it.open) / it.open * 100;
                 }
-            }
+            
             i++;
         }
     cout << "6Max: " << max6 << endl;

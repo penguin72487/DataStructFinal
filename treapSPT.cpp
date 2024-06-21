@@ -7,7 +7,13 @@
 #include <sstream>
 using namespace std;
 #define endl "\n"
-
+#ifdef ENABLE_TIMING
+    #include<chrono>
+    using namespace std::chrono;
+    auto start = high_resolution_clock::now();
+    auto stop = high_resolution_clock::now();
+    auto durat = duration_cast<nanoseconds>(stop - start);
+#endif
 class k_Bar : public treap_Value {
     int Date;
     public:
@@ -96,16 +102,40 @@ int main() {
 
 
     // ////////////////////////////////////////////////////////////////////////////////////////////
-    // freopen("P1out/b/outputTreap.txt", "w", stdout);
+    freopen("SPT.txt", "w", stdout);
+    #ifdef ENABLE_TIMING
+        start = high_resolution_clock::now();
+    #endif
     Treap<k_Bar> treap;
     for (auto& it : k_line) {
         treap.insert(it);
     }
+    #ifdef ENABLE_TIMING
+        stop = high_resolution_clock::now();
+        durat = duration_cast<nanoseconds>(stop - start);
+        cout << "\nTreap build: " << double (durat.count())/1000000.0 << " ms.\n";
+    #endif
+    #ifdef ENABLE_TIMING
+        start = high_resolution_clock::now();
+    #endif
     cout<<treap<<endl;
+        #ifdef ENABLE_TIMING
+        stop = high_resolution_clock::now();
+        durat = duration_cast<nanoseconds>(stop - start);
+        cout << "\nTreap output: " << double (durat.count())/1000000.0 << " ms.\n";
+    #endif
     cout <<"1: " << treap.size() << endl;
     cout << "2: Small 10" << endl;
     Treap<k_Bar> a, b;
+    #ifdef ENABLE_TIMING
+        start = high_resolution_clock::now();
+    #endif
     treap.slip_By_Size(a, b, 10);
+    #ifdef ENABLE_TIMING
+        stop = high_resolution_clock::now();
+        durat = duration_cast<nanoseconds>(stop - start);
+        cout << "\nTreap split: " << double (durat.count())/1000000.0 << " ms.\n";
+    #endif
     cout << a << endl;
 
     cout << "3: Big 10" << endl;

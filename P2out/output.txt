@@ -1,4 +1,4 @@
-Total number of unique products: 51
+Total number of unique products: 1029
 TXO_1000_201706_P exists: No
 TXO_9500_201706_C exists: Yes
 GIO_5500_201706_C exists: No
@@ -26,6 +26,10 @@ Top 10 largest prices with times:
 20170516 TXO 9900 201705 C 90502 154 2 0
 20170516 TXO 9900 201705 C 90502 154 1 0
 
-Median price: 111
+Middle
+112 at 20170515 
+112 at 20170515
+Average: 112
+
 Max return: 0.0131579 at 20170517
 Min return: 0 at 20170517

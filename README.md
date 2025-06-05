@@ -1,8 +1,11 @@
 # 資料結構 2024期末專題
-開發演算法 @企鵝72487 
-使用演算法 @SiroKu_ 
-繪圖 @Jaxx 
-寫報告 @提醒我打程式
+開發演算法 @企鵝72487   
+使用演算法 @SiroKu_   
+繪圖 @Jaxx   
+寫報告 @提醒我打程式  
+# 報告Canva連結
+[DATA STRUCTURE FINAL PROJECT](https://www.canva.com/design/DAGIdrcn6Es/C-j-c14iJnXv4sfM9aSGpA/edit?utm_content=DAGIdrcn6Es&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
 # request
 
 [原文](finalProject.pdf)  [原文附註釋](finalProject_with註釋.pdf)  
